@@ -116,12 +116,19 @@ class TiendaApplicationTests {
     /**
      * 3. Lista los nombres y los precios de todos los productos, convirtiendo los nombres a mayúscula.
      */
+
     @Test
     void test3() {
         var listProds = prodRepo.findAll();
+        //creo un map con el nombre en mayusculas y el precio del producto
+        //donde el nombre en mayusculas es la clave y el precio es el valor
         var listaProdsMayus = listProds.stream()
                 .collect(toMap(p -> p.getNombre().toUpperCase(), Producto::getPrecio));
         listaProdsMayus.forEach((k, v) -> System.out.println(k + " - " + v));
+
+        Assertions.assertEquals(11, listaProdsMayus.size());
+       //compruebo que el nombre en mayusculas no sea igual al nombre en minusculas
+        Assertions.assertNotSame(listaProdsMayus.get("DISCO DURO SATA3 1TB"), listProds.get(0).getNombre());
 
     }
 
@@ -131,9 +138,15 @@ class TiendaApplicationTests {
     @Test
     void test4() {
         var listFabs = fabRepo.findAll();
+        //creo un map con el nombre del fabricante y los dos primeros caracteres en mayusculas
+        //donde el nombre del fabricante es la clave y los dos primeros caracteres en mayusculas es el valor
         var listaFabsMayus = listFabs.stream()
                 .collect(toMap(Fabricante::getNombre, f -> f.getNombre().substring(0, 2).toUpperCase()));
         listaFabsMayus.forEach((k, v) -> System.out.println(k + " - " + v));
+
+        Assertions.assertEquals(9, listaFabsMayus.size());
+        //compruebo que el nombre del fabricante no sea igual a los dos primeros caracteres en mayusculas
+        Assertions.assertNotSame(listaFabsMayus.get("Asus"), listFabs.get(0).getNombre().substring(0, 2).toUpperCase());
     }
 
     /**
@@ -142,11 +155,19 @@ class TiendaApplicationTests {
     @Test
     void test5() {
         var listFabs = fabRepo.findAll();
+        //creo una lista con los codigos de los fabricantes que tienen productos
+        //si el producto no esta vacio, mapeo el codigo del fabricante
         var listaFabsCod = listFabs.stream()
                 .filter(f -> !f.getProductos().isEmpty())
                 .map(Fabricante::getCodigo)
                 .toList();
         listaFabsCod.forEach(System.out::println);
+
+        Assertions.assertEquals(7, listaFabsCod.size());
+        //compruebo que la lista de codigos de fabricantes no este vacia
+        Assertions.assertFalse(listaFabsCod.isEmpty());
+
+
     }
 
     /**
