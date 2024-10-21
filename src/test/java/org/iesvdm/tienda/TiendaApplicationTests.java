@@ -44,7 +44,7 @@ class TiendaApplicationTests {
         //probando
         List<String> nombres = fabRepo.findAll().stream()
                 .map(Fabricante::getNombre)
-                .collect(Collectors.toList());
+                .toList();
         Assertions.assertEquals(9, nombres.size());
         Assertions.assertTrue(nombres.contains("Asus"));
         Assertions.assertFalse(listFabs.isEmpty());
@@ -109,7 +109,7 @@ class TiendaApplicationTests {
 
         //compruebo que la lista de productos en dolares no este vacia y que el precio en euros sea distinto al precio en dolares
         Assertions.assertEquals(11, listProdsDolares.size());
-        Assertions.assertFalse(precioEuros == precioDolares);
+        Assertions.assertNotSame(precioEuros, precioDolares);
 
     }
 
@@ -132,7 +132,7 @@ class TiendaApplicationTests {
     void test4() {
         var listFabs = fabRepo.findAll();
         var listaFabsMayus = listFabs.stream()
-                .collect(toMap(fabricante -> fabricante.getNombre(), f -> f.getNombre().substring(0, 2).toUpperCase()));
+                .collect(toMap(Fabricante::getNombre, f -> f.getNombre().substring(0, 2).toUpperCase()));
         listaFabsMayus.forEach((k, v) -> System.out.println(k + " - " + v));
     }
 
