@@ -23,3 +23,6 @@ SELECT nombre FROM fabricante ORDER BY nombre DESC;
 
 -- Test n7 Lista los nombres de los productos ordenados en primer lugar por el nombre de forma ascendente y en segundo lugar por el precio de forma descendente.
 SELECT nombre, precio FROM producto ORDER BY nombre ASC, precio DESC;
+
+-- Test n8 Lista los 5 primeros fabricantes.
+SELECT nombre FROM fabricante LIMIT 5;

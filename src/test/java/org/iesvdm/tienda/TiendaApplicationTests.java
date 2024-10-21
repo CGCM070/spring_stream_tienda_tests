@@ -193,7 +193,7 @@ class TiendaApplicationTests {
         var listProds = prodRepo.findAll();
         // ordenamos por el nombre de forma ascendente y por el precio de forma descendente
         var listProdsOrd = listProds.stream()
-                .sorted((p1,p2) -> {
+                .sorted((p1, p2) -> {
                     if (p1.getNombre().compareTo(p2.getNombre()) == 0) {
                         return Double.compare(p2.getPrecio(), p1.getPrecio()); //desendente
                     }
@@ -213,7 +213,17 @@ class TiendaApplicationTests {
     @Test
     void test8() {
         var listFabs = fabRepo.findAll();
-        //TODO
+        //creo una lista con los 5 primeros fabricantes
+        var listFabs5 = listFabs.stream()
+                .limit(5)
+                .toList();
+        listFabs5.forEach(System.out::println);
+
+        //compruebo que la lista de los 5 primeros fabricantes no este vacia
+        Assertions.assertEquals(5, listFabs5.size());
+
+
+
     }
 
     /**
