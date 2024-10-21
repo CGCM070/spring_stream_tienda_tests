@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 
 import static java.math.RoundingMode.HALF_UP;
@@ -251,7 +252,10 @@ class TiendaApplicationTests {
     @Test
     void test10() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var prodMasBarato = listProds.stream()
+                .min(Comparator.comparingDouble(Producto::getPrecio))
+                .orElse(null);
+        System.out.println("El producto más barato es: " + prodMasBarato.getNombre() + " - " + prodMasBarato.getPrecio());
     }
 
     /**
