@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.math.RoundingMode.HALF_UP;
 import static java.util.stream.Collectors.toMap;
@@ -105,7 +104,7 @@ class TiendaApplicationTests {
         precioDolares = BigDecimal.valueOf(precioDolares).setScale(2, HALF_UP).doubleValue();
 
         System.out.println("Precio total en euros: " + precioEuros
-        + "\nPrecio total en dolares: " + precioDolares );
+                + "\nPrecio total en dolares: " + precioDolares);
 
         //compruebo que la lista de productos en dolares no este vacia y que el precio en euros sea distinto al precio en dolares
         Assertions.assertEquals(11, listProdsDolares.size());
@@ -127,7 +126,7 @@ class TiendaApplicationTests {
         listaProdsMayus.forEach((k, v) -> System.out.println(k + " - " + v));
 
         Assertions.assertEquals(11, listaProdsMayus.size());
-       //compruebo que el nombre en mayusculas no sea igual al nombre en minusculas
+        //compruebo que el nombre en mayusculas no sea igual al nombre en minusculas
         Assertions.assertNotSame(listaProdsMayus.get("DISCO DURO SATA3 1TB"), listProds.get(0).getNombre());
 
     }
@@ -166,8 +165,6 @@ class TiendaApplicationTests {
         Assertions.assertEquals(7, listaFabsCod.size());
         //compruebo que la lista de codigos de fabricantes no este vacia
         Assertions.assertFalse(listaFabsCod.isEmpty());
-
-
     }
 
     /**
@@ -176,7 +173,16 @@ class TiendaApplicationTests {
     @Test
     void test6() {
         var listFabs = fabRepo.findAll();
-        //TODO
+        // ordenamos por el orden inverso y mapeamos el nombre del fabricante
+        var lisFabDesc = listFabs.stream()
+                .sorted((f1, f2) -> f2.getNombre().compareTo(f1.getNombre()))
+                .map(Fabricante::getNombre)
+                .toList();
+
+        //compruebo que la lista de fabricantes ordenados de forma descendente no este vacia
+        Assertions.assertFalse(lisFabDesc.isEmpty());
+        //compruebo que el primer fabricante sea Xiaomi
+        Assertions.assertEquals("Xiaomi", lisFabDesc.get(0));
     }
 
     /**
@@ -185,7 +191,20 @@ class TiendaApplicationTests {
     @Test
     void test7() {
         var listProds = prodRepo.findAll();
-        //TODO
+        // ordenamos por el nombre de forma ascendente y por el precio de forma descendente
+        var listProdsOrd = listProds.stream()
+                .sorted((p1,p2) -> {
+                    if (p1.getNombre().compareTo(p2.getNombre()) == 0) {
+                        return Double.compare(p2.getPrecio(), p1.getPrecio()); //desendente
+                    }
+                    return p1.getNombre().compareTo(p2.getNombre());
+                }).toList();
+        listProdsOrd.forEach(System.out::println);
+//        System.out.println("El primer producto es: " + listProdsOrd.get(0).getNombre());
+
+        //compruebo que el primer producto sea Disco duro SATA3 1TB
+        Assertions.assertEquals("Disco SSD 1 TB", listProdsOrd.get(0).getNombre());
+
     }
 
     /**
