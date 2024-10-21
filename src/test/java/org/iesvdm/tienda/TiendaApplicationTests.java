@@ -223,7 +223,6 @@ class TiendaApplicationTests {
         Assertions.assertEquals(5, listFabs5.size());
 
 
-
     }
 
     /**
@@ -232,7 +231,18 @@ class TiendaApplicationTests {
     @Test
     void test9() {
         var listFabs = fabRepo.findAll();
-        //TODO
+        //creo una lista con los 2 fabricantes a partir del cuarto fabricante
+        //salto los 3 primeros fabricantes y con skip y limit cojo los dos siguientes
+        var list = listFabs.stream()
+                .skip(3)
+                .limit(2)
+                .toList();
+        list.forEach(System.out::println);
+
+        //compruebo que la lista de los 2 fabricantes a partir del cuarto fabricante no este vacia
+        Assertions.assertEquals(2, list.size());
+        //compruebo que el primer fabricante sea Samsung que es el primer fabricante a partir del cuarto
+        Assertions.assertEquals("Samsung", list.get(0).getNombre());
     }
 
     /**

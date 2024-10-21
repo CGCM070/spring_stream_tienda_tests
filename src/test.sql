@@ -26,3 +26,6 @@ SELECT nombre, precio FROM producto ORDER BY nombre ASC, precio DESC;
 
 -- Test n8 Lista los 5 primeros fabricantes.
 SELECT nombre FROM fabricante LIMIT 5;
+
+-- Test n9 Devuelve una lista con 2 fabricantes a partir del cuarto fabricante. El cuarto fabricante también se debe incluir en la respuesta
+SELECT nombre FROM fabricante LIMIT 2 OFFSET 3;
