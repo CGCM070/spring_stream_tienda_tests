@@ -176,13 +176,17 @@ class TiendaApplicationTests {
         var listFabs = fabRepo.findAll();
         // ordenamos por el orden inverso y mapeamos el nombre del fabricante
         var lisFabDesc = listFabs.stream()
-                .sorted((f1, f2) -> f2.getNombre().compareTo(f1.getNombre()))
+//                .sorted((f1, f2) -> f2.getNombre().compareTo(f1.getNombre()))
+//                .map(Fabricante::getNombre)
+//                .toList();
+        .sorted(comparing(Fabricante::getNombre,reverseOrder()))
                 .map(Fabricante::getNombre)
                 .toList();
 
+        System.out.println(lisFabDesc);
         //compruebo que la lista de fabricantes ordenados de forma descendente no este vacia
         Assertions.assertFalse(lisFabDesc.isEmpty());
-        //compruebo que el primer fabricante sea Xiaomi
+//        //compruebo que el primer fabricante sea Xiaomi
         Assertions.assertEquals("Xiaomi", lisFabDesc.get(0));
     }
 
