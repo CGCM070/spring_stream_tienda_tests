@@ -1,7 +1,6 @@
-use tienda; -- Profe cuidado con el nombre de la base de datos que se esta utilizando por si no te va
-
+ -- Profe cuidado con el nombre de la base de datos que se esta utilizando por si no te va
+use tienda;
 -- Test n1 Lista los nombres y los precios de todos los productos de la tabla producto
-
 SELECT nombre, precio FROM producto;
 
 -- Test n2 lista de Producto completa con el precio de euros convertido a dólares .
@@ -30,3 +29,7 @@ SELECT nombre FROM fabricante LIMIT 2 OFFSET 3;
 
 -- Test n10 Lista el nombre y el precio del producto más barato
 SELECT nombre, precio FROM producto ORDER BY precio ASC LIMIT 1;
+
+-- Test n11
+
+-- Test n12

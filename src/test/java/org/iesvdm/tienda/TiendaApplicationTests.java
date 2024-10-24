@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.List;
 
 import static java.math.RoundingMode.HALF_UP;
+import static java.util.Comparator.*;
 import static java.util.stream.Collectors.toMap;
 
 
@@ -187,19 +187,22 @@ class TiendaApplicationTests {
     }
 
     /**
-     * 7. Lista los nombres de los productos ordenados en primer lugar por el nombre de forma ascendente y en segundo lugar por el precio de forma descendente.
+     * 7. Lista los nombres de los productos ordenados en primer lugar
+     * por el nombre de forma ascendente y en segundo lugar por el precio de forma descendente.
      */
     @Test
     void test7() {
         var listProds = prodRepo.findAll();
         // ordenamos por el nombre de forma ascendente y por el precio de forma descendente
         var listProdsOrd = listProds.stream()
-                .sorted((p1, p2) -> {
-                    if (p1.getNombre().compareTo(p2.getNombre()) == 0) {
-                        return Double.compare(p2.getPrecio(), p1.getPrecio()); //desendente
-                    }
-                    return p1.getNombre().compareTo(p2.getNombre());
-                }).toList();
+//                .sorted((p1, p2) -> {
+//                    if (p1.getNombre().compareTo(p2.getNombre()) == 0) {
+//                        return Double.compare(p2.getPrecio(), p1.getPrecio()); //desendente
+//                    }
+//                    return p1.getNombre().compareTo(p2.getNombre());
+//                }).toList();
+
+                .sorted(comparing(Producto::getNombre).thenComparing(Producto::getPrecio, reverseOrder())).toList();
         listProdsOrd.forEach(System.out::println);
 //        System.out.println("El primer producto es: " + listProdsOrd.get(0).getNombre());
 
@@ -253,7 +256,7 @@ class TiendaApplicationTests {
     void test10() {
         var listProds = prodRepo.findAll();
         var prodMasBarato = listProds.stream()
-                .min(Comparator.comparingDouble(Producto::getPrecio))
+                .min(comparingDouble(Producto::getPrecio))
                 .orElse(null);
         System.out.println("El producto más barato es: " + prodMasBarato.getNombre() + " - " + prodMasBarato.getPrecio());
     }
@@ -264,7 +267,16 @@ class TiendaApplicationTests {
     @Test
     void test11() {
         var listProds = prodRepo.findAll();
-        //TODO
+
+        Producto lisProdCaro = null;
+        if (!listProds.isEmpty()) {
+            lisProdCaro = listProds.stream()
+                    .max(comparingDouble(Producto::getPrecio)).get();
+
+        }
+
+        System.out.println(lisProdCaro);
+        System.out.println("El producto más caro es: " + lisProdCaro.getNombre() + " - " + lisProdCaro.getPrecio());
     }
 
     /**
