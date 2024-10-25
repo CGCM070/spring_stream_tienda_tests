@@ -179,7 +179,7 @@ class TiendaApplicationTests {
 //                .sorted((f1, f2) -> f2.getNombre().compareTo(f1.getNombre()))
 //                .map(Fabricante::getNombre)
 //                .toList();
-        .sorted(comparing(Fabricante::getNombre,reverseOrder()))
+                .sorted(comparing(Fabricante::getNombre, reverseOrder()))
                 .map(Fabricante::getNombre)
                 .toList();
 
@@ -276,7 +276,6 @@ class TiendaApplicationTests {
         if (!listProds.isEmpty()) {
             lisProdCaro = listProds.stream()
                     .max(comparingDouble(Producto::getPrecio)).get();
-
         }
 
         System.out.println(lisProdCaro);
@@ -289,7 +288,17 @@ class TiendaApplicationTests {
     @Test
     void test12() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var listProdsFab2 = listProds.stream()
+                .filter(p -> p.getFabricante().getCodigo() == 2)
+                .collect(toMap(Producto::getNombre, Producto::getFabricante));
+        System.out.println(listProdsFab2);
+
+        //Compruebo que la lista de productos sea igual a 2
+        Assertions.assertEquals(2, listProdsFab2.size());
+        //Comprebo que el codigo del fabricante sea igual a 2 - - > sobre el map que quite anteriormente
+        Assertions.assertEquals(2, listProdsFab2.values().stream().findFirst().get().getCodigo());
+
+
     }
 
     /**
@@ -298,7 +307,18 @@ class TiendaApplicationTests {
     @Test
     void test13() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var listProdsMenor120 = listProds.stream()
+                .filter(p -> p.getPrecio() <= 120)
+                .map(Producto::getNombre)
+                .toList();
+        listProdsMenor120.forEach(System.out::println);
+
+        //Compruebo que la lista de productos sea igual a 3
+        Assertions.assertEquals(3, listProdsMenor120.size());
+        //Compruebo que el primer producto sea Disco SSD 1 TB
+        Assertions.assertEquals("Disco duro SATA3 1TB", listProdsMenor120.get(0));
+        //Compuebo que el precio del primer producto sea menor o igual a 120
+        Assertions.assertTrue(listProds.stream().anyMatch(p -> p.getPrecio() <= 120));
     }
 
     /**
@@ -307,7 +327,19 @@ class TiendaApplicationTests {
     @Test
     void test14() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var listProdsMayor400 = listProds.stream()
+                .filter(p -> p.getPrecio() >= 400)
+//                .map(Producto::getNombre)
+//                .toList();
+                .collect(toMap(Producto::getNombre, Producto::getPrecio));
+        System.out.println(listProdsMayor400);
+
+        //Compruebo que la lista de productos sea igual a 3
+        Assertions.assertEquals(3, listProdsMayor400.size());
+        //Compruebo que el primer producto sea Portátil Yoga 520
+        Assertions.assertEquals("Portátil Yoga 520", listProdsMayor400.keySet().stream().findFirst().get());
+        //Compuebo que el precio del primer producto sea mayor o igual a 400
+        Assertions.assertTrue(listProds.stream().anyMatch(p -> p.getPrecio() >= 400));
     }
 
     /**
@@ -316,7 +348,11 @@ class TiendaApplicationTests {
     @Test
     void test15() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var listProdsEntre80y300 = listProds.stream()
+                .filter(p -> p.getPrecio() >= 80 && p.getPrecio() <= 300)
+                .map(Producto::getNombre)
+                .toList();
+        listProdsEntre80y300.forEach(System.out::println);
     }
 
     /**

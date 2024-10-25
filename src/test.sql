@@ -30,6 +30,65 @@ SELECT nombre FROM fabricante LIMIT 2 OFFSET 3;
 -- Test n10 Lista el nombre y el precio del producto más barato
 SELECT nombre, precio FROM producto ORDER BY precio ASC LIMIT 1;
 
--- Test n11
+-- Test n11 Lista el nombre y el precio del producto más caro
+SELECT nombre, precio FROM producto ORDER BY precio DESC LIMIT 1;
 
--- Test n12
+-- Test n12  Lista el nombre de todos los productos del fabricante cuyo código de fabricante es igual a 2.
+SELECT nombre FROM producto WHERE codigo_fabricante = 2;
+
+-- Test n13 Lista el nombre de los productos que tienen un precio menor o igual a 120€.
+SELECT nombre FROM producto WHERE precio <= 120;
+
+-- Test n14 Lista los productos que tienen un precio mayor o igual a 400€.
+SELECT nombre FROM producto WHERE precio >= 400;
+
+-- Test n15 Lista todos los productos que tengan un precio entre 80€ y 300€.
+SELECT nombre FROM producto WHERE precio BETWEEN 80 AND 300;
+
+-- Test n16
+
+-- Test n17
+
+-- Test n18
+
+-- Test n19
+
+-- Test n20
+
+-- Test n21
+
+-- Test n22
+
+-- Test n23
+
+-- Test n24
+
+-- Test n25
+
+-- Test n26
+
+-- Test n27
+
+-- Test n28
+
+-- Test n29
+
+-- Test n30
+
+-- Test n31
+
+-- Test n32
+
+-- Test n33
+
+-- Test n34
+
+-- Test n35
+
+-- Test n36
+
+-- Test n37
+
+-- Test n38
+
+-- Test n39
