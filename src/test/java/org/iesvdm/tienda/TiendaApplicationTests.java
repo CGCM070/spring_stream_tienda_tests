@@ -491,9 +491,14 @@ class TiendaApplicationTests {
     @Test
     void test23() {
         var listProds = prodRepo.findAll();
-        //TODO
-    }
+        var listaGeneralOrd = listProds.stream()
+                .sorted(comparing(p -> p.getFabricante().getNombre()))
+                .map(p -> p.getNombre() + " - " + p.getPrecio() + " - " + p.getFabricante().getNombre())
+                .toList();
+        listaGeneralOrd.forEach(System.out::println);
 
+
+    }
     /**
      * 24. Devuelve el nombre del producto, su precio y el nombre de su fabricante, del producto más caro.
      */
