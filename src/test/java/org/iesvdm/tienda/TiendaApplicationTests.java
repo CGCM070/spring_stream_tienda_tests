@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import static java.math.RoundingMode.HALF_UP;
 import static java.util.Comparator.*;
@@ -361,7 +362,20 @@ class TiendaApplicationTests {
     @Test
     void test16() {
         var listProds = prodRepo.findAll();
-        //TODO
+         var listProdMayor200CF6 = listProds.stream()
+                 .filter(p-> p.getPrecio() > 200 && p.getFabricante().getCodigo() == 6)
+                 .toList();
+         System.out.println(listProdMayor200CF6);
+
+        //Compruebo que la lista de productos sea igual a 1
+        Assertions.assertEquals(1, listProdMayor200CF6.size());
+        //Compruebo que el primer producto sea GeForce GTX 1080 Xtreme
+        Assertions.assertEquals("GeForce GTX 1080 Xtreme", listProdMayor200CF6.get(0).getNombre());
+        //Compuebo que el precio del primer producto sea mayor a 200
+        Assertions.assertTrue(listProdMayor200CF6.stream().anyMatch(p -> p.getPrecio() > 200));
+        //Compuebo que el codigo del fabricante del primer producto sea igual a 6
+        Assertions.assertTrue(listProdMayor200CF6.stream().anyMatch(p -> p.getFabricante().getCodigo() == 6));
+
     }
 
     /**
@@ -370,7 +384,19 @@ class TiendaApplicationTests {
     @Test
     void test17() {
         var listProds = prodRepo.findAll();
-        //TODO
+        Set<Integer> codigos = Set.of(1, 3, 5);
+        var listProdsCF135 = listProds.stream()
+                .filter(p -> codigos.contains(p.getFabricante().getCodigo()))
+//                .map(producto -> producto.getNombre() + " - " + producto.getFabricante().getNombre())
+                .toList();
+        System.out.println(listProdsCF135);
+
+        //Compruebo que la lista de productos sea igual a 5
+        Assertions.assertEquals(5, listProdsCF135.size());
+        //Compuebo que el codigo del fabricante del primer producto sea igual a 1, 3 o 5
+        Assertions.assertTrue(listProdsCF135.stream().anyMatch(p -> codigos.contains(p.getFabricante().getCodigo())));
+
+
     }
 
     /**
