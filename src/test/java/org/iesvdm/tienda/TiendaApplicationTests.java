@@ -505,13 +505,18 @@ class TiendaApplicationTests {
      */
     @Test
     void test24() {
+
         var listProds = prodRepo.findAll();
         var listProdCaro = listProds.stream()
                 .max(comparingDouble(Producto::getPrecio))
                 .orElseThrow(() -> new RuntimeException("error"));
-
         System.out.println( "Prod : " +  listProdCaro.getNombre() + " Precio : " +   listProdCaro.getPrecio()
                 + " Fab " + listProdCaro.getFabricante().getNombre() );
+
+        //Conpruebo que el producto más caro sea GeForce GTX 1080 Xtreme
+        Assertions.assertEquals("GeForce GTX 1080 Xtreme" , listProdCaro.getNombre());
+        // Compruebo el precio del producto más caro
+        Assertions. assertEquals(755 ,listProdCaro.getPrecio());
     }
 
     /**
