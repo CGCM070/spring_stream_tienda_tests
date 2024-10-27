@@ -51,15 +51,21 @@ SELECT nombre FROM producto WHERE precio > 200 AND codigo_fabricante = 6;
 -- Test n17 Lista todos los productos donde el código de fabricante sea 1, 3 o 5 utilizando un Set de codigos de fabricantes para filtrar.
 SELECT nombre FROM producto WHERE codigo_fabricante IN (1, 3, 5);
 
--- Test n18
+-- Test n18   Lista el nombre y el precio de los productos en céntimos
+SELECT nombre, precio * 100 FROM producto;
 
--- Test n19
+-- Test n19 Lista los nombres de los fabricantes cuyo nombre empiece por la letra S
+SELECT nombre FROM fabricante WHERE nombre LIKE 'S%';
 
--- Test n20
+-- Test n20 Devuelve una lista con los productos que contienen la cadena Portátil en el nombre.
+SELECT nombre FROM producto WHERE nombre LIKE '%Portátil%';
 
--- Test n21
+-- Test n21 Devuelve una lista con el nombre de todos los productos que contienen la cadena Monitor en el nombre y tienen un precio inferior a 215 €.
+SELECT  nombre FROM producto WHERE  nombre LIKE '%Monitor%' AND precio < 215;
 
--- Test n22
+-- Test n22  Lista el nombre y el precio de todos los productos que tengan un precio mayor o igual a 180€.
+-- Ordene el resultado en primer lugar por el precio (en orden descendente) y en segundo lugar por el nombre (en orden ascendente)
+SELECT nombre, precio FROM producto WHERE precio >= 180 ORDER BY precio DESC, nombre ASC;
 
 -- Test n23
 

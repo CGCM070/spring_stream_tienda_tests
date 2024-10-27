@@ -362,10 +362,10 @@ class TiendaApplicationTests {
     @Test
     void test16() {
         var listProds = prodRepo.findAll();
-         var listProdMayor200CF6 = listProds.stream()
-                 .filter(p-> p.getPrecio() > 200 && p.getFabricante().getCodigo() == 6)
-                 .toList();
-         System.out.println(listProdMayor200CF6);
+        var listProdMayor200CF6 = listProds.stream()
+                .filter(p -> p.getPrecio() > 200 && p.getFabricante().getCodigo() == 6)
+                .toList();
+        System.out.println(listProdMayor200CF6);
 
         //Compruebo que la lista de productos sea igual a 1
         Assertions.assertEquals(1, listProdMayor200CF6.size());
@@ -405,7 +405,14 @@ class TiendaApplicationTests {
     @Test
     void test18() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var listProdsCentimos = listProds.stream()
+                .collect(toMap(Producto::getNombre, p -> p.getPrecio() * 100));
+        listProdsCentimos.forEach((k, v) -> System.out.println(k + " - " + v));
+
+        //Compruebo que la lista de productos en céntimos no este vacia
+        Assertions.assertFalse(listProdsCentimos.isEmpty());
+        //Compuebo que el precio del primer producto sea en céntimos utilizando el % 100
+        Assertions.assertEquals(0, listProdsCentimos.values().stream().findFirst().get() % 100);
     }
 
 
@@ -415,7 +422,15 @@ class TiendaApplicationTests {
     @Test
     void test19() {
         var listFabs = fabRepo.findAll();
-        //TODOS
+        var listaFabConS = listFabs.stream()
+//                .filter(fabricante -> fabricante.getNombre().substring(0, 1).equalsIgnoreCase("S")).toList();
+                .filter(fabricante -> fabricante.getNombre().startsWith("S")).toList();
+        listaFabConS.forEach(System.out::println);
+
+        //Compruebo que la lista de fabricantes no este vacia
+        Assertions.assertFalse(listaFabConS.isEmpty());
+        //Compuebo que el primer fabricante empiece por la letra S
+        Assertions.assertTrue(listaFabConS.get(0).getNombre().startsWith("S"));
     }
 
     /**
@@ -424,7 +439,15 @@ class TiendaApplicationTests {
     @Test
     void test20() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var listProdsPortatil = listProds.stream()
+                .filter(p -> p.getNombre().contains("Portátil"))
+                .toList();
+        listProdsPortatil.forEach(System.out::println);
+
+        //Compruebo que la lista de productos no este vacia
+        Assertions.assertFalse(listProdsPortatil.isEmpty());
+        //Compuebo que el primer producto contenga la cadena Portátil en el nombre
+        Assertions.assertTrue(listProdsPortatil.get(0).getNombre().contains("Portátil"));
     }
 
     /**
@@ -433,16 +456,32 @@ class TiendaApplicationTests {
     @Test
     void test21() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var listMonitorMenor215 = listProds.stream()
+                .filter(p -> p.getNombre().contains("Monitor") && p.getPrecio() < 215)
+                .map(Producto::getNombre)
+                .toList();
+        listMonitorMenor215.forEach(System.out::println);
+
+        //Compruebo que la lista de productos no este vacia
+        Assertions.assertFalse(listMonitorMenor215.isEmpty());
+        //Compuebo que el primer producto contenga la cadena Monitor en el
+        Assertions.assertTrue(listMonitorMenor215.stream().anyMatch(p -> p.contains("Monitor")
+                && listProds.stream().anyMatch(p2 -> p2.getPrecio() < 215)));
     }
 
     /**
      * 22. Lista el nombre y el precio de todos los productos que tengan un precio mayor o igual a 180€.
      * Ordene el resultado en primer lugar por el precio (en orden descendente) y en segundo lugar por el nombre (en orden ascendente).
      */
+    @Test
     void test22() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var listNombrePrecio120 = listProds.stream()
+                .filter(p -> p.getPrecio() >= 180)
+                .sorted(comparing(Producto::getPrecio, reverseOrder()).thenComparing(Producto::getNombre))
+                .map(p -> p.getNombre() + " - " + p.getPrecio())
+                .toList();
+        listNombrePrecio120.forEach(System.out::println);
     }
 
     /**
