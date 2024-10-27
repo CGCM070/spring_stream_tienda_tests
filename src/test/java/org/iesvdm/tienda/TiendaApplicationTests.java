@@ -129,7 +129,7 @@ class TiendaApplicationTests {
 
         Assertions.assertEquals(11, listaProdsMayus.size());
         //compruebo que el nombre en mayusculas no sea igual al nombre en minusculas
-        Assertions.assertNotSame(listaProdsMayus.get("DISCO DURO SATA3 1TB"), listProds.get(0).getNombre());
+        Assertions.assertNotSame(listaProdsMayus.get("DISCO DURO SATA3 1TB"), listProds.getFirst().getNombre());
 
     }
 
@@ -147,7 +147,7 @@ class TiendaApplicationTests {
 
         Assertions.assertEquals(9, listaFabsMayus.size());
         //compruebo que el nombre del fabricante no sea igual a los dos primeros caracteres en mayusculas
-        Assertions.assertNotSame(listaFabsMayus.get("Asus"), listFabs.get(0).getNombre().substring(0, 2).toUpperCase());
+        Assertions.assertNotSame(listaFabsMayus.get("Asus"), listFabs.getFirst().getNombre().substring(0, 2).toUpperCase());
     }
 
     /**
@@ -188,7 +188,7 @@ class TiendaApplicationTests {
         //compruebo que la lista de fabricantes ordenados de forma descendente no este vacia
         Assertions.assertFalse(lisFabDesc.isEmpty());
 //        //compruebo que el primer fabricante sea Xiaomi
-        Assertions.assertEquals("Xiaomi", lisFabDesc.get(0));
+        Assertions.assertEquals("Xiaomi", lisFabDesc.getFirst());
     }
 
     /**
@@ -212,7 +212,7 @@ class TiendaApplicationTests {
 //        System.out.println("El primer producto es: " + listProdsOrd.get(0).getNombre());
 
         //compruebo que el primer producto sea Disco duro SATA3 1TB
-        Assertions.assertEquals("Disco SSD 1 TB", listProdsOrd.get(0).getNombre());
+        Assertions.assertEquals("Disco SSD 1 TB", listProdsOrd.getFirst().getNombre());
 
     }
 
@@ -251,7 +251,7 @@ class TiendaApplicationTests {
         //compruebo que la lista de los 2 fabricantes a partir del cuarto fabricante no este vacia
         Assertions.assertEquals(2, list.size());
         //compruebo que el primer fabricante sea Samsung que es el primer fabricante a partir del cuarto
-        Assertions.assertEquals("Samsung", list.get(0).getNombre());
+        Assertions.assertEquals("Samsung", list.getFirst().getNombre());
     }
 
     /**
@@ -317,7 +317,7 @@ class TiendaApplicationTests {
         //Compruebo que la lista de productos sea igual a 3
         Assertions.assertEquals(3, listProdsMenor120.size());
         //Compruebo que el primer producto sea Disco SSD 1 TB
-        Assertions.assertEquals("Disco duro SATA3 1TB", listProdsMenor120.get(0));
+        Assertions.assertEquals("Disco duro SATA3 1TB", listProdsMenor120.getFirst());
         //Compuebo que el precio del primer producto sea menor o igual a 120
         Assertions.assertTrue(listProds.stream().anyMatch(p -> p.getPrecio() <= 120));
     }
@@ -370,7 +370,7 @@ class TiendaApplicationTests {
         //Compruebo que la lista de productos sea igual a 1
         Assertions.assertEquals(1, listProdMayor200CF6.size());
         //Compruebo que el primer producto sea GeForce GTX 1080 Xtreme
-        Assertions.assertEquals("GeForce GTX 1080 Xtreme", listProdMayor200CF6.get(0).getNombre());
+        Assertions.assertEquals("GeForce GTX 1080 Xtreme", listProdMayor200CF6.getFirst().getNombre());
         //Compuebo que el precio del primer producto sea mayor a 200
         Assertions.assertTrue(listProdMayor200CF6.stream().anyMatch(p -> p.getPrecio() > 200));
         //Compuebo que el codigo del fabricante del primer producto sea igual a 6
@@ -430,7 +430,7 @@ class TiendaApplicationTests {
         //Compruebo que la lista de fabricantes no este vacia
         Assertions.assertFalse(listaFabConS.isEmpty());
         //Compuebo que el primer fabricante empiece por la letra S
-        Assertions.assertTrue(listaFabConS.get(0).getNombre().startsWith("S"));
+        Assertions.assertTrue(listaFabConS.getFirst().getNombre().startsWith("S"));
     }
 
     /**
@@ -447,7 +447,7 @@ class TiendaApplicationTests {
         //Compruebo que la lista de productos no este vacia
         Assertions.assertFalse(listProdsPortatil.isEmpty());
         //Compuebo que el primer producto contenga la cadena Portátil en el nombre
-        Assertions.assertTrue(listProdsPortatil.get(0).getNombre().contains("Portátil"));
+        Assertions.assertTrue(listProdsPortatil.getFirst().getNombre().contains("Portátil"));
     }
 
     /**
