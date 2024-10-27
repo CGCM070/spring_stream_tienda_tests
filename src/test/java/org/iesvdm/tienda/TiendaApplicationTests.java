@@ -499,13 +499,19 @@ class TiendaApplicationTests {
 
 
     }
+
     /**
      * 24. Devuelve el nombre del producto, su precio y el nombre de su fabricante, del producto más caro.
      */
     @Test
     void test24() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var listProdCaro = listProds.stream()
+                .max(comparingDouble(Producto::getPrecio))
+                .orElseThrow(() -> new RuntimeException("error"));
+
+        System.out.println( "Prod : " +  listProdCaro.getNombre() + " Precio : " +   listProdCaro.getPrecio()
+                + " Fab " + listProdCaro.getFabricante().getNombre() );
     }
 
     /**

@@ -73,7 +73,10 @@ SELECT nombre, precio FROM producto WHERE precio >= 180 ORDER BY precio DESC, no
     ON p.codigo_fabricante = f.codigo ORDER BY f.nombre ASC;
 
 
--- Test n24
+-- Test n24 Devuelve el nombre del producto, su precio y el nombre de su fabricante, del producto más caro.
+ SELECT p.nombre , p.precio , f.nombre FROM producto p JOIN
+     fabricante f ON p.codigo_fabricante = f.codigo ORDER BY p.precio
+ DESC LIMIT 1;
 
 -- Test n25
 
