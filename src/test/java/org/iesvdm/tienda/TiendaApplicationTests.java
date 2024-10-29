@@ -539,7 +539,15 @@ class TiendaApplicationTests {
     @Test
     void test25() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var listProdCrucialMayor200 = listProds.stream()
+                .filter(p -> p.getFabricante().getNombre().equals("Crucial") && p.getPrecio() > 200)
+                .toList();
+        listProdCrucialMayor200.forEach(System.out::println);
+
+        //Compruebo que la lista tenga 1 producto
+        Assertions.assertEquals(1, listProdCrucialMayor200.size());
+        //Compruebo que el primer producto sea GeForce GTX 1080 Xtreme
+        Assertions.assertEquals("GeForce GTX 1080 Xtreme", listProdCrucialMayor200.getFirst().getNombre());
     }
 
     /**
@@ -548,7 +556,6 @@ class TiendaApplicationTests {
     @Test
     void test26() {
         var listProds = prodRepo.findAll();
-        //TODO
     }
 
     /**

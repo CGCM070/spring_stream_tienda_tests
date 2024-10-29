@@ -78,7 +78,10 @@ SELECT p.nombre, p.precio, f.nombre  FROM producto p  JOIN fabricante f
      fabricante f ON p.codigo_fabricante = f.codigo ORDER BY p.precio
  DESC LIMIT 1;
 
--- Test n25
+-- Test n25 Devuelve una lista de todos los productos del fabricante Crucial que tengan un precio mayor que 200€
+SELECT p.nombre, p.precio, f.nombre FROM producto p JOIN fabricante f
+ON p.codigo_fabricante = f.codigo WHERE f.nombre = 'Crucial' AND p.precio > 200;
+
 
 -- Test n26
 
