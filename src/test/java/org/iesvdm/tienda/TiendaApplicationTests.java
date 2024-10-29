@@ -481,7 +481,16 @@ class TiendaApplicationTests {
                 .sorted(comparing(Producto::getPrecio, reverseOrder()).thenComparing(Producto::getNombre))
                 .map(p -> p.getNombre() + " - " + p.getPrecio())
                 .toList();
+        System.out.println(listNombrePrecio120);
         listNombrePrecio120.forEach(System.out::println);
+
+        //Compruebo que la lista de productos no este vacia y tenga un total de 7
+        Assertions.assertEquals(7, listNombrePrecio120.size());
+        //Compuebo que el primer producto sea GeForce GTX 1080 Xtreme
+        Assertions.assertEquals("GeForce GTX 1080 Xtreme", listNombrePrecio120.get(0).split(" - ")[0]);
+        //Compuebo que el precio del primer producto sea mayor o igual a 180
+        Assertions.assertTrue(listNombrePrecio120.stream().anyMatch(p -> Double.parseDouble(p.split(" - ")[1]) >= 180));
+
     }
 
     /**
@@ -491,11 +500,16 @@ class TiendaApplicationTests {
     @Test
     void test23() {
         var listProds = prodRepo.findAll();
-        var listaGeneralOrd = listProds.stream()
+        var listaGeneralOrd=  listProds.stream()
                 .sorted(comparing(p -> p.getFabricante().getNombre()))
-                .map(p -> p.getNombre() + " - " + p.getPrecio() + " - " + p.getFabricante().getNombre())
+                 .map(p -> p.getNombre() + " - " + p.getPrecio() + " - " + p.getFabricante().getNombre())
                 .toList();
         listaGeneralOrd.forEach(System.out::println);
+
+        //Compruebo que la lista de productos no este vacia y tenga un total de 11
+        Assertions.assertEquals(11, listaGeneralOrd.size());
+        //Compuebo que el primer producto sea Monitor 24 LED Full HD
+        Assertions.assertEquals("Monitor 24 LED Full HD", listaGeneralOrd.get(0).split(" - ")[0]);
 
 
     }
@@ -510,13 +524,13 @@ class TiendaApplicationTests {
         var listProdCaro = listProds.stream()
                 .max(comparingDouble(Producto::getPrecio))
                 .orElseThrow(() -> new RuntimeException("error"));
-        System.out.println( "Prod : " +  listProdCaro.getNombre() + " Precio : " +   listProdCaro.getPrecio()
-                + " Fab " + listProdCaro.getFabricante().getNombre() );
+        System.out.println("Prod : " + listProdCaro.getNombre() + " Precio : " + listProdCaro.getPrecio()
+                + " Fab " + listProdCaro.getFabricante().getNombre());
 
         //Conpruebo que el producto más caro sea GeForce GTX 1080 Xtreme
-        Assertions.assertEquals("GeForce GTX 1080 Xtreme" , listProdCaro.getNombre());
+        Assertions.assertEquals("GeForce GTX 1080 Xtreme", listProdCaro.getNombre());
         // Compruebo el precio del producto más caro
-        Assertions. assertEquals(755 ,listProdCaro.getPrecio());
+        Assertions.assertEquals(755, listProdCaro.getPrecio());
     }
 
     /**
@@ -805,3 +819,4 @@ class TiendaApplicationTests {
     }
 
 }
+

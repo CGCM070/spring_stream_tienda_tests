@@ -69,7 +69,7 @@ SELECT nombre, precio FROM producto WHERE precio >= 180 ORDER BY precio DESC, no
 
 -- Test n23 Devuelve una lista con el nombre del producto, precio y nombre de fabricante de todos los productos de la base de datos.
 -- Ordene el resultado por el nombre del fabricante, por orden alfabético.
-    SELECT p.nombre, p.precio, f.nombre  FROM producto p  JOIN fabricante f
+SELECT p.nombre, p.precio, f.nombre  FROM producto p  JOIN fabricante f
     ON p.codigo_fabricante = f.codigo ORDER BY f.nombre ASC;
 
 
