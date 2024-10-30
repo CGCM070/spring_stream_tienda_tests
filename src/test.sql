@@ -40,10 +40,10 @@ SELECT nombre FROM producto WHERE codigo_fabricante = 2;
 SELECT nombre FROM producto WHERE precio <= 120;
 
 -- Test n14 Lista los productos que tienen un precio mayor o igual a 400€.
-SELECT nombre FROM producto WHERE precio >= 400;
+SELECT * FROM producto WHERE precio >= 400;
 
 -- Test n15 Lista todos los productos que tengan un precio entre 80€ y 300€.
-SELECT nombre FROM producto WHERE precio BETWEEN 80 AND 300;
+SELECT * FROM producto WHERE precio BETWEEN 80 AND 300;
 
 -- Test n16 Lista todos los productos que tengan un precio mayor que 200€ y que el código de fabricante sea igual a 6.
 SELECT nombre FROM producto WHERE precio > 200 AND codigo_fabricante = 6;
@@ -83,7 +83,9 @@ SELECT p.nombre, p.precio, f.nombre FROM producto p JOIN fabricante f
 ON p.codigo_fabricante = f.codigo WHERE f.nombre = 'Crucial' AND p.precio > 200;
 
 
--- Test n26
+-- Test n26 Devuelve un listado con todos los productos de los fabricantes Asus, Hewlett-Packard y Seagate
+SELECT p.nombre, f.nombre FROM producto p JOIN fabricante f
+ON p.codigo_fabricante = f.codigo WHERE f.nombre IN ('Asus', 'Hewlett-Packard', 'Seagate');
 
 -- Test n27
 

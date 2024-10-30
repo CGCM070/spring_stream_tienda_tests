@@ -351,9 +351,14 @@ class TiendaApplicationTests {
         var listProds = prodRepo.findAll();
         var listProdsEntre80y300 = listProds.stream()
                 .filter(p -> p.getPrecio() >= 80 && p.getPrecio() <= 300)
-                .map(Producto::getNombre)
                 .toList();
         listProdsEntre80y300.forEach(System.out::println);
+
+        //Compruebo que la lista de productos sea igual a 7
+        Assertions.assertEquals(7, listProdsEntre80y300.size());
+        //Compruebo que el precio del primer producto sea mayor o igual a 80 y menor o igual a 300
+        Assertions.assertTrue(listProdsEntre80y300.stream().anyMatch(p -> p.getPrecio() >= 80 && p.getPrecio() <= 300));
+
     }
 
     /**
@@ -556,6 +561,12 @@ class TiendaApplicationTests {
     @Test
     void test26() {
         var listProds = prodRepo.findAll();
+        Set<String> nombres = Set.of("Asus", "Hewlett-Packard", "Seagate");
+        var listProdAsusHewleSegate = listProds.stream()
+                .filter(p -> nombres.contains(p.getFabricante().getNombre()))
+                .toList();
+        listProdAsusHewleSegate.forEach(System.out::println);
+
     }
 
     /**
