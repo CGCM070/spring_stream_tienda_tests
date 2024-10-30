@@ -392,7 +392,6 @@ class TiendaApplicationTests {
         Set<Integer> codigos = Set.of(1, 3, 5);
         var listProdsCF135 = listProds.stream()
                 .filter(p -> codigos.contains(p.getFabricante().getCodigo()))
-//                .map(producto -> producto.getNombre() + " - " + producto.getFabricante().getNombre())
                 .toList();
         System.out.println(listProdsCF135);
 

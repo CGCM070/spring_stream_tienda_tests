@@ -46,10 +46,10 @@ SELECT * FROM producto WHERE precio >= 400;
 SELECT * FROM producto WHERE precio BETWEEN 80 AND 300;
 
 -- Test n16 Lista todos los productos que tengan un precio mayor que 200€ y que el código de fabricante sea igual a 6.
-SELECT nombre FROM producto WHERE precio > 200 AND codigo_fabricante = 6;
+SELECT * FROM producto WHERE precio > 200 AND codigo_fabricante = 6;
 
 -- Test n17 Lista todos los productos donde el código de fabricante sea 1, 3 o 5 utilizando un Set de codigos de fabricantes para filtrar.
-SELECT nombre FROM producto WHERE codigo_fabricante IN (1, 3, 5);
+SELECT * FROM producto WHERE codigo_fabricante IN (1, 3, 5);
 
 -- Test n18   Lista el nombre y el precio de los productos en céntimos
 SELECT nombre, precio * 100 FROM producto;
