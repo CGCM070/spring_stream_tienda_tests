@@ -934,7 +934,6 @@ class TiendaApplicationTests {
     @Test
     void test42() {
         var listFabs = fabRepo.findAll();
-        //TODO
     }
 
     /**
@@ -943,7 +942,14 @@ class TiendaApplicationTests {
     @Test
     void test43() {
         var listFabs = fabRepo.findAll();
-        //TODO
+        var listFabsSumaMayor1000 = listFabs.stream()
+
+                //usando un reduce dentro de un filter
+//                .filter(f -> f.getProductos().stream().mapToDouble(Producto::getPrecio).reduce(0, (v, v1) -> v+v1) > 1000)
+                .filter(f -> f.getProductos().stream().mapToDouble(Producto::getPrecio).sum() > 1000)
+                .map(Fabricante::getNombre)
+                .toList();
+        listFabsSumaMayor1000.forEach(System.out::println);
     }
 
     /**
