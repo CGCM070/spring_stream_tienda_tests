@@ -413,6 +413,7 @@ class TiendaApplicationTests {
                 .collect(toMap(Producto::getNombre, p -> p.getPrecio() * 100));
         listProdsCentimos.forEach((k, v) -> System.out.println(k + " - " + v));
 
+        listProdsCentimos.forEach((k, v) -> System.out.println(k + " - " + v));
         //Compruebo que la lista de productos en céntimos no este vacia
         Assertions.assertFalse(listProdsCentimos.isEmpty());
         //Compuebo que el precio del primer producto sea en céntimos utilizando el % 100
@@ -504,9 +505,9 @@ class TiendaApplicationTests {
     @Test
     void test23() {
         var listProds = prodRepo.findAll();
-        var listaGeneralOrd=  listProds.stream()
+        var listaGeneralOrd = listProds.stream()
                 .sorted(comparing(p -> p.getFabricante().getNombre()))
-                 .map(p -> p.getNombre() + " - " + p.getPrecio() + " - " + p.getFabricante().getNombre())
+                .map(p -> p.getNombre() + " - " + p.getPrecio() + " - " + p.getFabricante().getNombre())
                 .toList();
         listaGeneralOrd.forEach(System.out::println);
 
@@ -527,7 +528,10 @@ class TiendaApplicationTests {
         var listProds = prodRepo.findAll();
         var listProdCaro = listProds.stream()
                 .max(comparingDouble(Producto::getPrecio))
-                .orElseThrow(() -> new RuntimeException("error"));
+                //buscar otra en caso de no encontrar
+                        .orElse(listProds.getLast());
+
+        System.out.println(listProdCaro);
         System.out.println("Prod : " + listProdCaro.getNombre() + " Precio : " + listProdCaro.getPrecio()
                 + " Fab " + listProdCaro.getFabricante().getNombre());
 
@@ -566,6 +570,11 @@ class TiendaApplicationTests {
                 .toList();
         listProdAsusHewleSegate.forEach(System.out::println);
 
+        //Compruebo que la lista tenga 5 productos
+        Assertions.assertEquals(5, listProdAsusHewleSegate.size());
+        //Compruebo que el alguno de los fabricantes sea Asus, Hewlett-Packard o Seagate
+        Assertions.assertTrue(listProdAsusHewleSegate.stream().anyMatch(p -> nombres.contains(p.getFabricante().getNombre())));
+
     }
 
     /**
@@ -584,7 +593,20 @@ class TiendaApplicationTests {
     @Test
     void test27() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var listProdMayor180 = listProds.stream()
+                .filter(p -> p.getPrecio() >= 180)
+                .sorted(comparing(Producto::getPrecio, reverseOrder()).thenComparing(Producto::getNombre))
+                //Con String format
+                .map(p -> String.format("%-25s|%2s |%1s", p.getNombre(), p.getPrecio(), p.getFabricante().getNombre()))
+//                .map(p -> p.getNombre() + "          " + p.getPrecio() + " "  + p.getFabricante().getNombre())
+                .toList();
+
+        System.out.println("Producto        Precio         Fabricante");
+        System.out.println("-------------------------------------------");
+        listProdMayor180.forEach(System.out::println);
+        //Compruebo que la lista tenga 7 productos
+        Assertions.assertEquals(7, listProdMayor180.size());
+
     }
 
     /**
@@ -652,7 +674,17 @@ class TiendaApplicationTests {
     @Test
     void test29() {
         var listFabs = fabRepo.findAll();
-        //TODO
+        var listFabsSinProd = listFabs.stream()
+                .filter(f -> f.getProductos().isEmpty())
+                .toList();
+        listFabsSinProd.forEach(System.out::println);
+
+        //Compruebo que el tamaño de la lista sea 2
+        Assertions.assertEquals(2, listFabsSinProd.size());
+        //Compruebo que el primer fabricante sea Huawei y el segundo Xiaomi
+        Set <String> nombres = Set.of("Huawei", "Xiaomi");
+        Assertions.assertTrue(listFabsSinProd.stream().allMatch(f -> nombres.contains(f.getNombre())));
+
     }
 
     /**
@@ -661,7 +693,9 @@ class TiendaApplicationTests {
     @Test
     void test30() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var numProds = listProds.stream()
+                .count();
+        System.out.println("Número total de productos: " + numProds);
     }
 
 

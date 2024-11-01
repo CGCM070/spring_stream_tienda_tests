@@ -87,13 +87,19 @@ ON p.codigo_fabricante = f.codigo WHERE f.nombre = 'Crucial' AND p.precio > 200;
 SELECT p.nombre, f.nombre FROM producto p JOIN fabricante f
 ON p.codigo_fabricante = f.codigo WHERE f.nombre IN ('Asus', 'Hewlett-Packard', 'Seagate');
 
--- Test n27
+-- Test n27 Devuelve un listado de los nombres fabricantes que existen en la base de datos, junto con los nombres productos que tiene cada uno de ellos
+-- El listado deberá mostrar también aquellos fabricantes que no tienen productos asociados.
+SELECT f.nombre, p.nombre   FROM fabricante f LEFT JOIN producto p
+ON f.codigo = p.codigo_fabricante;
 
 -- Test n28
 
--- Test n29
+-- Test n29  Devuelve un listado donde sólo aparezcan aquellos fabricantes que no tienen ningún producto asociado
+ SELECT f.nombre FROM fabricante f LEFT JOIN producto p
+ON f.codigo = p.codigo_fabricante WHERE p.codigo_fabricante IS NULL;
 
--- Test n30
+-- Test n30 Calcula el número total de productos que hay en la tabla productos.
+SELECT COUNT(*) as numProd FROM producto;
 
 -- Test n31
 
