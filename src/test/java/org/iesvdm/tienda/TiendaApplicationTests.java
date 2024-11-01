@@ -529,7 +529,7 @@ class TiendaApplicationTests {
         var listProdCaro = listProds.stream()
                 .max(comparingDouble(Producto::getPrecio))
                 //buscar otra en caso de no encontrar
-                        .orElse(listProds.getLast());
+                .orElse(listProds.getLast());
 
         System.out.println(listProdCaro);
         System.out.println("Prod : " + listProdCaro.getNombre() + " Precio : " + listProdCaro.getPrecio()
@@ -682,7 +682,7 @@ class TiendaApplicationTests {
         //Compruebo que el tamaño de la lista sea 2
         Assertions.assertEquals(2, listFabsSinProd.size());
         //Compruebo que el primer fabricante sea Huawei y el segundo Xiaomi
-        Set <String> nombres = Set.of("Huawei", "Xiaomi");
+        Set<String> nombres = Set.of("Huawei", "Xiaomi");
         Assertions.assertTrue(listFabsSinProd.stream().allMatch(f -> nombres.contains(f.getNombre())));
 
     }
@@ -705,7 +705,16 @@ class TiendaApplicationTests {
     @Test
     void test31() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var numFabsConProd = listProds.stream()
+//                .filter(producto -> !producto.getFabricante().getProductos().isEmpty())
+                .map(producto -> producto.getFabricante().codigo)
+                .distinct()
+                .toList();
+        System.out.println("Número de fabricantes con productos: " + numFabsConProd.size());
+
+        //Compruebo que el tamaño de la lista sea 7
+        Assertions.assertEquals(7, numFabsConProd.size());
+
     }
 
     /**
@@ -714,7 +723,19 @@ class TiendaApplicationTests {
     @Test
     void test32() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var mediaPrecio = listProds.stream()
+                .mapToDouble(Producto::getPrecio)
+                //Reduce , moralria el average aquí .averege.orElse(Trow new exception)
+                .reduce(0, (a, b) -> (a + b)) / listProds.size();
+
+        //seteamos la escala a 2 decimales y hacemos un redondeo half up para la casa
+        mediaPrecio = BigDecimal.valueOf(mediaPrecio).setScale(2, HALF_UP).doubleValue();
+        System.out.println("Media del precio de todos los productos: " + mediaPrecio);
+
+        //Compruebo que la media sea 271.72
+        Assertions.assertEquals(271.72, mediaPrecio);
+
+
     }
 
     /**
@@ -723,7 +744,15 @@ class TiendaApplicationTests {
     @Test
     void test33() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var precioMasBarato = listProds.stream()
+                .mapToDouble(Producto::getPrecio)
+                .min()
+                .orElse(0);
+        System.out.println("Precio más barato de todos los productos: " + precioMasBarato);
+
+        //Compruebo que el precio más barato sea 59.99
+        Assertions.assertEquals(59.99, precioMasBarato);
+
     }
 
     /**
@@ -732,7 +761,21 @@ class TiendaApplicationTests {
     @Test
     void test34() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var sumaPrecios = listProds.stream()
+                .map(Producto::getPrecio)
+                .reduce(0.0, (a, b) -> a + b);
+
+        var sumaPrecioV2 = listProds.stream()
+                .mapToDouble(Producto::getPrecio)
+                .reduce(0, Double::sum);
+
+        System.out.println("Suma de los precios de todos los productos: " + sumaPrecios);
+        System.out.println("Suma de los precios de todos los productos: " + sumaPrecioV2);
+
+        //Compruebo que la suma de los precios sea 2998.96
+        Assertions.assertEquals(2998.96, sumaPrecios);
+        Assertions.assertEquals(2998.96, sumaPrecioV2);
+
     }
 
     /**
@@ -741,7 +784,10 @@ class TiendaApplicationTests {
     @Test
     void test35() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var numProdsAsus = listProds.stream()
+                .filter(p -> p.getFabricante().getNombre().equals("Asus"))
+                .count();
+        System.out.println("Número de productos del fabricante Asus: " + numProdsAsus);
     }
 
     /**
@@ -750,7 +796,22 @@ class TiendaApplicationTests {
     @Test
     void test36() {
         var listProds = prodRepo.findAll();
-        //TODO
+        var mediaPrecioAsus = listProds.stream()
+                .filter(p -> p.getFabricante().getNombre().equals("Asus"))
+                .mapToDouble(Producto::getPrecio)
+                //sin average
+//                .reduce(0, (a, b) -> (a + b)) / listProds.stream()
+//                .filter(p -> p.getFabricante().getNombre().equals("Asus"))
+//                .count();
+                .average()
+                .orElseThrow(() -> new RuntimeException("No se ha podido calcular la media"));
+
+        //seteamos la escala a 2 decimales y hacemos un redondeo half up para la casa
+        mediaPrecioAsus = BigDecimal.valueOf(mediaPrecioAsus).setScale(2, HALF_UP).doubleValue();
+        System.out.println("Media del precio de los productos del fabricante Asus: " + mediaPrecioAsus);
+
+        //Compruebo que la media de los productos del fabricante Asus sea 224.0
+        Assertions.assertEquals(224.0, mediaPrecioAsus);
     }
 
 

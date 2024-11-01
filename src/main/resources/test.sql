@@ -101,17 +101,23 @@ ON f.codigo = p.codigo_fabricante WHERE p.codigo_fabricante IS NULL;
 -- Test n30 Calcula el número total de productos que hay en la tabla productos.
 SELECT COUNT(*) as numProd FROM producto;
 
--- Test n31
+-- Test n31 Calcula el número de fabricantes con productos, utilizando un stream de Productos
+SELECT COUNT(DISTINCT codigo_fabricante) as numFab FROM producto;
 
--- Test n32
+-- Test n32 Calcula la media del precio de todos los productos
+SELECT  ROUND(AVG(precio),2) as mediaPrecio FROM producto;
 
--- Test n33
+-- Test n33 Calcula el precio más barato de todos los productos. No se puede utilizar ordenación de stream.
+SELECT MIN(precio) as precioMin FROM producto;
 
--- Test n34
+-- Test n34 Calcula la suma de los precios de todos los productos
+SELECT SUM(precio) as sumaPrecio FROM producto;
 
--- Test n35
+-- Test n35 Calcula el número de productos que tiene el fabricante Asus
+SELECT COUNT(*) as numProd FROM producto WHERE codigo_fabricante = 1;
 
--- Test n36
+-- Test n36 Calcula la media del precio de todos los productos del fabricante Asus
+SELECT ROUND(AVG(precio),2) as mediaPrecio FROM producto WHERE codigo_fabricante = 1;
 
 -- Test n37
 
