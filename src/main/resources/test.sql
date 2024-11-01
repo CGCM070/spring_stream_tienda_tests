@@ -119,8 +119,22 @@ SELECT COUNT(*) as numProd FROM producto WHERE codigo_fabricante = 1;
 -- Test n36 Calcula la media del precio de todos los productos del fabricante Asus
 SELECT ROUND(AVG(precio),2) as mediaPrecio FROM producto WHERE codigo_fabricante = 1;
 
--- Test n37
+-- Test n37 Muestra el precio máximo, precio mínimo, precio medio y el número total de productos que tiene el fabricante Crucial
 
--- Test n38
+
+-- Test n38 Muestra el número total de productos que tiene cada uno de los fabricantes.
+-- El listado también debe incluir los fabricantes que no tienen ningún producto.
+--  El resultado mostrará dos columnas, una con el nombre del fabricante y otra con el número de productos que tiene.
+-- Ordene el resultado descendentemente por el número de productos
+SELECT f.nombre, COUNT(p.codigo_fabricante) as numProd FROM fabricante f LEFT JOIN producto p
+ON f.codigo = p.codigo_fabricante GROUP BY f.nombre ORDER BY numProd DESC;
+
+
 
 -- Test n39
+
+-- Test n40
+
+-- Test n41 Devuelve un listado con los nombres de los fabricantes que tienen 2 o más productos.
+SELECT f.nombre FROM fabricante f JOIN producto p
+ON f.codigo = p.codigo_fabricante GROUP BY f.nombre HAVING COUNT(p.codigo_fabricante) >= 2;

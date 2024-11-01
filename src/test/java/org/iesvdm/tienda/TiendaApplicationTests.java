@@ -14,6 +14,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.math.RoundingMode.HALF_UP;
 import static java.util.Comparator.*;
 import static java.util.stream.Collectors.toMap;
@@ -696,6 +698,9 @@ class TiendaApplicationTests {
         var numProds = listProds.stream()
                 .count();
         System.out.println("Número total de productos: " + numProds);
+
+        //Compruebo que el número total de productos sea 11
+        Assertions.assertEquals(11, numProds);
     }
 
 
@@ -788,6 +793,10 @@ class TiendaApplicationTests {
                 .filter(p -> p.getFabricante().getNombre().equals("Asus"))
                 .count();
         System.out.println("Número de productos del fabricante Asus: " + numProdsAsus);
+
+        //Compruebo que el número de productos del fabricante Asus sea 2
+        Assertions.assertEquals(2, numProdsAsus);
+
     }
 
     /**
@@ -822,7 +831,24 @@ class TiendaApplicationTests {
     @Test
     void test37() {
         var listProds = prodRepo.findAll();
-        //TODO
+
+        //a[0] -> max
+        //a[1] -> min
+        //a[2] -> suma
+        //a[3] -> contador
+        //b -> precio
+        var listProdsCrucial = listProds.stream()
+                .filter(p -> p.getFabricante().getNombre().equals("Crucial"))
+                .map(Producto::getPrecio)
+                .reduce(new Double[]{0.0, Double.MAX_VALUE, 0.0, 0.0},
+                        (a, b) -> new Double[]{max(a[0], b), min(a[1], b), a[2] + b, a[3] + 1},
+                        (a, b) -> new Double[]{max(a[0], b[0]), min(a[1], b[1]), a[2] + b[2], a[3] + b[3]});
+
+        System.out.println("Precio máximo: " + listProdsCrucial[0]);
+        System.out.println("Precio mínimo: " + listProdsCrucial[1]);
+        System.out.println("Precio medio: " + listProdsCrucial[2] / listProdsCrucial[3]);
+        System.out.println("Número total de productos: " + listProdsCrucial[3]);
+
     }
 
     /**
@@ -847,12 +873,21 @@ class TiendaApplicationTests {
     @Test
     void test38() {
         var listFabs = fabRepo.findAll();
-        //TODO
+        var res = listFabs.stream()
+                .map(f -> f.getNombre() + " - " + f.getProductos().size())
+                //metamos un espcion de 13 "" con String.format
+                .sorted(comparing(s -> Integer.parseInt(s.split(" - ")[1]), reverseOrder()))
+                .toList();
+        System.out.println("Fabricante     #Productos");
+        System.out.println("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-");
+        res.forEach(System.out::println);
+
     }
 
     /**
      * 39. Muestra el precio máximo, precio mínimo y precio medio de los productos de cada uno de los fabricantes.
-     * El resultado mostrará el nombre del fabricante junto con los datos que se solicitan. Realízalo en 1 solo stream principal. Utiliza reduce con Double[] como "acumulador".
+     * El resultado mostrará el nombre del fabricante junto con los datos que se solicitan.
+     * Realízalo en 1 solo stream principal. Utiliza reduce con Double[] como "acumulador".
      * Deben aparecer los fabricantes que no tienen productos.
      */
     @Test
@@ -868,7 +903,6 @@ class TiendaApplicationTests {
     @Test
     void test40() {
         var listFabs = fabRepo.findAll();
-        //TODO
     }
 
     /**
@@ -877,7 +911,20 @@ class TiendaApplicationTests {
     @Test
     void test41() {
         var listFabs = fabRepo.findAll();
-        //TODO
+        var listFabs2oMas = listFabs.stream()
+                .filter(f -> f.getProductos().size() >= 2)
+                .map(Fabricante::getNombre)
+                .toList();
+
+        listFabs2oMas.forEach(System.out::println);
+
+        //Compruebo que la lista de fabricantes tenga 4
+        Assertions.assertEquals(4, listFabs2oMas.size());
+        Set<String> nombres = Set.of("Asus", "Lenovo", "Hewlett-Packard", "Crucial");
+        //Compruebo que los fabricantes sean Asus, Lenovo, Hewlett-Packard y Crucial
+        Assertions.assertTrue(listFabs2oMas.stream().allMatch(nombres::contains));
+
+
     }
 
     /**
