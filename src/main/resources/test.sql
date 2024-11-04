@@ -114,12 +114,16 @@ SELECT MIN(precio) as precioMin FROM producto;
 SELECT SUM(precio) as sumaPrecio FROM producto;
 
 -- Test n35 Calcula el número de productos que tiene el fabricante Asus
-SELECT COUNT(*) as numProd FROM producto WHERE codigo_fabricante = 1;
+SELECT COUNT(*) as numProd FROM producto p JOIN tienda.fabricante f on f.codigo = p.codigo_fabricante
+WHERE lower(f.nombre) like 'Asus';
 
 -- Test n36 Calcula la media del precio de todos los productos del fabricante Asus
-SELECT ROUND(AVG(precio),2) as mediaPrecio FROM producto WHERE codigo_fabricante = 1;
+SELECT ROUND(AVG(precio),2) as mediaPrecio FROM producto p  join tienda.fabricante f on f.codigo = p.codigo_fabricante
+WHERE lower(f.nombre) like 'Asus';
 
 -- Test n37 Muestra el precio máximo, precio mínimo, precio medio y el número total de productos que tiene el fabricante Crucial
+SELECT MAX(p.precio) as precioMax,MIN(p.precio) as precioMin,ROUND(AVG(p.precio),2) as mediaPrecio,COUNT(p.codigo_fabricante) as numProd
+FROM producto p JOIN fabricante f ON f.codigo = p.codigo_fabricante WHERE f.nombre = 'Crucial';
 
 
 -- Test n38 Muestra el número total de productos que tiene cada uno de los fabricantes.

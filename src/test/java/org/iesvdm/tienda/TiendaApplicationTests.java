@@ -836,23 +836,27 @@ class TiendaApplicationTests {
     void test37() {
         var listProds = prodRepo.findAll();
 
-        //a[0] -> max
-        //a[1] -> min
-        //a[2] -> suma
-        //a[3] -> contador
-        //b -> precio
-        var listProdsCrucial = listProds.stream()
+        //planificamos, tengo que hacer un reduce con un array de 4 elementos
+        /***
+         * [0] va ser el maximo
+         * [1] va ser el minimo
+         * [2] va ser la suma
+         * [3] va ser el contador
+         * p sera el precio
+         */
+
+        var resultado = listProds.stream()
                 .filter(p -> p.getFabricante().getNombre().equals("Crucial"))
                 .map(Producto::getPrecio)
-                .reduce(new Double[]{0.0, Double.MAX_VALUE, 0.0, 0.0},
+               . reduce( new Double [] {0.0 , Double.MAX_VALUE, 0.0, 0.0},
                         (a, b) -> new Double[]{max(a[0], b), min(a[1], b), a[2] + b, a[3] + 1},
                         (a, b) -> new Double[]{max(a[0], b[0]), min(a[1], b[1]), a[2] + b[2], a[3] + b[3]});
 
-        System.out.println("Precio máximo: " + listProdsCrucial[0]);
-        System.out.println("Precio mínimo: " + listProdsCrucial[1]);
-        System.out.println("Precio medio: " + listProdsCrucial[2] / listProdsCrucial[3]);
-        System.out.println("Número total de productos: " + listProdsCrucial[3]);
 
+                System.out.println("Precio máximo: " + resultado[0]);
+                System.out.println("Precio mínimo: " + resultado[1]);
+                System.out.println("Precio medio: " + resultado[2] / resultado[3]);
+                System.out.println("Número total de productos: " + resultado[3]);
     }
 
     /**
@@ -1027,16 +1031,6 @@ class TiendaApplicationTests {
     @Test
     void test46() {
         var listFabs = fabRepo.findAll();
-//        var test = listFabs.stream()
-//                .sorted(comparing(Fabricante::getNombre))
-//                .map(f -> f.getProductos().stream()
-//                        .filter(p -> p.getPrecio() >= f.getProductos().stream()
-//                                .mapToDouble(Producto::getPrecio).average().orElse(0.0))
-//                        .sorted(comparing(Producto::getPrecio))
-//                        .map(producto -> producto.getNombre() + " " + producto.getPrecio() + " " + f.getNombre())
-//                        .toList());
-//        test.forEach(System.out::println);
-
         var listProdOrd = listFabs.stream()
                 .sorted(comparing(Fabricante::getNombre))
                 .flatMap(f ->f.getProductos().stream()
