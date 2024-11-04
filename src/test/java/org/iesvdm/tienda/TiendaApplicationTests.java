@@ -743,8 +743,6 @@ class TiendaApplicationTests {
 
         //Compruebo que la media sea 271.72
         Assertions.assertEquals(271.72, mediaPrecio);
-
-
     }
 
     /**
@@ -851,7 +849,6 @@ class TiendaApplicationTests {
                . reduce( new Double [] {0.0 , Double.MAX_VALUE, 0.0, 0.0},
                         (a, b) -> new Double[]{max(a[0], b), min(a[1], b), a[2] + b, a[3] + 1},
                         (a, b) -> new Double[]{max(a[0], b[0]), min(a[1], b[1]), a[2] + b[2], a[3] + b[3]});
-
 
                 System.out.println("Precio máximo: " + resultado[0]);
                 System.out.println("Precio mínimo: " + resultado[1]);
