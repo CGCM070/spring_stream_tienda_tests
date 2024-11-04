@@ -139,10 +139,31 @@ ON f.codigo = p.codigo_fabricante GROUP BY f.nombre ORDER BY numProd DESC;
 SELECT f.nombre FROM fabricante f JOIN producto p
 ON f.codigo = p.codigo_fabricante GROUP BY f.nombre HAVING COUNT(p.codigo_fabricante) >= 2;
 
--- Test n42
+-- Test n42 evuelve un listado con los nombres de los fabricantes y el número de productos que tiene cada uno con un precio superior o igual a 220 €.
+-- Ordenado de mayor a menor número de productos.
+
+select f.nombre, count(p.codigo_fabricante) as numProd from fabricante f join producto p
+on f.codigo = p.codigo_fabricante where p.precio >= 220 group by f.nombre order by numProd desc;
 
 -- Test n43 Devuelve un listado con los nombres de los fabricantes donde la suma del precio de todos sus productos es superior a 1000 €
 SELECT f.nombre FROM fabricante f JOIN producto p
 ON f.codigo = p.codigo_fabricante GROUP BY f.nombre HAVING SUM(p.precio) > 1000;
+
+
+-- Test n44 Devuelve un listado con los nombres de los fabricantes donde la suma del precio de todos sus productos es superior a 1000 €
+-- Ordenado de menor a mayor por cuantía de precio de los productos.
+SELECT f.nombre FROM fabricante f JOIN producto p
+ON f.codigo = p.codigo_fabricante GROUP BY f.nombre HAVING SUM(p.precio) > 1000 ORDER BY SUM(p.precio) ASC;
+
+-- Test n45 Devuelve un listado con el nombre del producto más caro que tiene cada fabricante,
+-- El resultado debe tener tres columnas: nombre del producto, precio y nombre del fabricante,
+-- El resultado tiene que estar ordenado alfabéticamente de menor a mayor por el nombre del fabricante.
+SELECT p.nombre, p.precio, f.nombre FROM producto p JOIN fabricante f
+ON p.codigo_fabricante = f.codigo WHERE p.precio = (SELECT MAX(precio) FROM producto WHERE codigo_fabricante = f.codigo) ORDER BY f.nombre ASC;
+
+-- Test n46 Devuelve un listado de todos los productos que tienen un precio mayor o igual a la media de todos los productos de su mismo fabricante,
+-- Se ordenará por fabricante en orden alfabético ascendente y los productos de cada fabricante tendrán que estar ordenados por precio descendente.
+SELECT p.nombre, p.precio, f.nombre FROM producto p JOIN fabricante f
+ON p.codigo_fabricante = f.codigo WHERE p.precio >= (SELECT AVG(precio) FROM producto WHERE codigo_fabricante = f.codigo) ORDER BY f.nombre ASC, p.precio DESC;
 
 

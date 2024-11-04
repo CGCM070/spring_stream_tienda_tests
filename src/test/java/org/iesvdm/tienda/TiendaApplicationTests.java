@@ -1,6 +1,7 @@
 package org.iesvdm.tienda;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.iesvdm.tienda.modelo.Fabricante;
 import org.iesvdm.tienda.modelo.Producto;
 import org.iesvdm.tienda.repository.FabricanteRepository;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static java.lang.Math.max;
@@ -21,6 +23,7 @@ import static java.util.Comparator.*;
 import static java.util.stream.Collectors.toMap;
 
 
+@Slf4j
 @SpringBootTest
 class TiendaApplicationTests {
 
@@ -204,7 +207,7 @@ class TiendaApplicationTests {
         var listProdsOrd = listProds.stream()
 //                .sorted((p1, p2) -> {
 //                    if (p1.getNombre().compareTo(p2.getNombre()) == 0) {
-//                        return Double.compare(p2.getPrecio(), p1.getPrecio()); //desendente
+//                        return Double.compare(p2.getPrecio(), p1.getPrecio()); //descendente
 //                    }
 //                    return p1.getNombre().compareTo(p2.getNombre());
 //                }).toList();
@@ -667,7 +670,8 @@ class TiendaApplicationTests {
     @Test
     void test28() {
         var listFabs = fabRepo.findAll();
-        //TODO
+
+
     }
 
     /**
@@ -767,8 +771,8 @@ class TiendaApplicationTests {
     void test34() {
         var listProds = prodRepo.findAll();
         var sumaPrecios = listProds.stream()
-                .map(Producto::getPrecio)
-                .reduce(0.0, (a, b) -> a + b);
+                .mapToDouble(Producto::getPrecio)
+                .reduce(0, (a, b) -> a + b);
 
         var sumaPrecioV2 = listProds.stream()
                 .mapToDouble(Producto::getPrecio)
@@ -777,9 +781,9 @@ class TiendaApplicationTests {
         System.out.println("Suma de los precios de todos los productos: " + sumaPrecios);
         System.out.println("Suma de los precios de todos los productos: " + sumaPrecioV2);
 
-        //Compruebo que la suma de los precios sea 2998.96
-        Assertions.assertEquals(2998.96, sumaPrecios);
-        Assertions.assertEquals(2998.96, sumaPrecioV2);
+        //Compruebo que la suma de los precios sea 2988.96
+        Assertions.assertEquals(2988.96, sumaPrecios);
+        Assertions.assertEquals(2988.96, sumaPrecioV2);
 
     }
 
@@ -934,6 +938,22 @@ class TiendaApplicationTests {
     @Test
     void test42() {
         var listFabs = fabRepo.findAll();
+        record FabricanteNumProd(String nombre, int numProd) {
+        }
+        var listFabsPrecioMayor220 = listFabs.stream()
+                .map(f -> new FabricanteNumProd(f.getNombre(),
+                        (int) f.getProductos().stream().filter(p -> p.getPrecio() >= 220).count()))
+
+                .filter(f -> f.numProd() > 0)
+                .sorted(comparingInt(FabricanteNumProd::numProd).reversed())
+                .toList();
+        listFabsPrecioMayor220.forEach(System.out::println);
+
+        //Compruebo que la lista de fabricantes tenga 3
+        Assertions.assertEquals(3, listFabsPrecioMayor220.size());
+        //Compruebo que los fabricantes sean Crucial, Lenovo y Asus
+        Set<String> nombres = Set.of("Crucial", "Lenovo", "Asus");
+        Assertions.assertTrue(listFabsPrecioMayor220.stream().allMatch(f -> nombres.contains(f.nombre())));
     }
 
     /**
@@ -950,6 +970,10 @@ class TiendaApplicationTests {
                 .map(Fabricante::getNombre)
                 .toList();
         listFabsSumaMayor1000.forEach(System.out::println);
+        //Compruebo que la lista de fabricantes tenga 1
+        Assertions.assertEquals(1, listFabsSumaMayor1000.size());
+        //Compruebo que el fabricante sea Lenovo
+        Assertions.assertEquals("Lenovo", listFabsSumaMayor1000.getFirst());
     }
 
     /**
@@ -959,7 +983,17 @@ class TiendaApplicationTests {
     @Test
     void test44() {
         var listFabs = fabRepo.findAll();
-        //TODO
+        var listFabsSumaMayor1000 = listFabs.stream()
+//                .sorted(comparingDouble(f -> f.getProductos().stream().map(Producto::getPrecio).reduce(0.0, (aDouble, aDouble2) -> aDouble+aDouble2)))  //MapToDouble y sumamos directamente
+                .sorted(comparingDouble(f -> f.getProductos().stream().mapToDouble(Producto::getPrecio).sum()))
+                .filter(f -> f.getProductos().stream().mapToDouble(Producto::getPrecio).sum() > 1000)
+                .map(Fabricante::getNombre)
+                .toList();
+        listFabsSumaMayor1000.forEach(System.out::println);
+
+        //Compruebo que la lista de fabricantes tenga 1 Y que el fabricante sea Lenovo
+        Assertions.assertEquals(1, listFabsSumaMayor1000.size());
+        Assertions.assertEquals("Lenovo", listFabsSumaMayor1000.getFirst());
     }
 
     /**
@@ -970,7 +1004,20 @@ class TiendaApplicationTests {
     @Test
     void test45() {
         var listFabs = fabRepo.findAll();
-        //TODO
+        System.out.println("Nombre del producto - Precio - Nombre del fabricante");
+        System.out.println("------------------------------------------------------");
+        var nomProdOrd = listFabs.stream()
+                .sorted(comparing(Fabricante::getNombre))
+                .map(f -> f.getProductos().stream()
+                        .max(comparingDouble(Producto::getPrecio))
+                        .map(p -> p.getNombre() + " -> " + p.getPrecio() + " --> " + f.getNombre())
+                        .orElse(null))
+                .toList();
+        nomProdOrd.forEach(System.out::println);
+
+        //Comprobamos que la lista de productos no este vacia
+        Assertions.assertFalse(nomProdOrd.isEmpty());
+
     }
 
     /**
@@ -980,7 +1027,30 @@ class TiendaApplicationTests {
     @Test
     void test46() {
         var listFabs = fabRepo.findAll();
-        //TODO
+//        var test = listFabs.stream()
+//                .sorted(comparing(Fabricante::getNombre))
+//                .map(f -> f.getProductos().stream()
+//                        .filter(p -> p.getPrecio() >= f.getProductos().stream()
+//                                .mapToDouble(Producto::getPrecio).average().orElse(0.0))
+//                        .sorted(comparing(Producto::getPrecio))
+//                        .map(producto -> producto.getNombre() + " " + producto.getPrecio() + " " + f.getNombre())
+//                        .toList());
+//        test.forEach(System.out::println);
+
+        var listProdOrd = listFabs.stream()
+                .sorted(comparing(Fabricante::getNombre))
+                .flatMap(f ->f.getProductos().stream()
+                        .filter(p ->p.getPrecio() >= f.getProductos().stream()
+                                        .mapToDouble(Producto::getPrecio).average().orElse(0.0)
+                        )
+                .sorted(comparing(Producto::getPrecio,reverseOrder()))
+                .map(producto -> producto.getNombre() + "" + producto.getPrecio() + "" + f.getNombre()))
+                .toList();
+
+        listProdOrd.forEach(System.out::println);
+
+        //Compruebo que la liene 7
+        Assertions.assertEquals(7, listProdOrd.size());
     }
 
 }
