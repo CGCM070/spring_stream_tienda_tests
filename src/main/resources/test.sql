@@ -92,7 +92,11 @@ ON p.codigo_fabricante = f.codigo WHERE f.nombre IN ('Asus', 'Hewlett-Packard', 
 SELECT f.nombre, p.nombre   FROM fabricante f LEFT JOIN producto p
 ON f.codigo = p.codigo_fabricante;
 
--- Test n28
+-- Test n28 . Devuelve un listado de los nombres fabricantes que existen en la base de datos, junto con los nombres productos que tiene cada uno de ellos.
+-- El listado deberá mostrar también aquellos fabricantes que no tienen productos asociados.
+SELECT f.nombre, p.nombre   FROM fabricante f LEFT JOIN producto p
+ON f.codigo = p.codigo_fabricante;
+
 
 -- Test n29  Devuelve un listado donde sólo aparezcan aquellos fabricantes que no tienen ningún producto asociado
  SELECT f.nombre FROM fabricante f LEFT JOIN producto p
@@ -134,10 +138,14 @@ SELECT f.nombre, COUNT(p.codigo_fabricante) as numProd FROM fabricante f LEFT JO
 ON f.codigo = p.codigo_fabricante GROUP BY f.nombre ORDER BY numProd DESC;
 
 
+-- Test n39   Muestra el precio máximo, precio mínimo y precio medio de los productos de cada uno de los fabricantes.
+SELECT f.nombre, MAX(p.precio) as precioMax, MIN(p.precio) as precioMin, ROUND(AVG(p.precio),2) as mediaPrecio FROM producto p JOIN fabricante f
+ON f.codigo = p.codigo_fabricante GROUP BY f.nombre;
 
--- Test n39
-
--- Test n40
+-- Test n40 uestra el precio máximo, precio mínimo, precio medio y el número total de productos de los fabricantes que tienen un precio medio superior a 200€
+SELECT f.nombre, MAX(p.precio) as precioMax, MIN(p.precio) as precioMin, (AVG(p.precio)) as mediaPrecio,
+       COUNT(p.codigo_fabricante) as numProd FROM producto p JOIN fabricante f
+ON f.codigo = p.codigo_fabricante GROUP BY f.nombre HAVING AVG(p.precio) > 200;
 
 -- Test n41 Devuelve un listado con los nombres de los fabricantes que tienen 2 o más productos.
 SELECT f.nombre FROM fabricante f JOIN producto p

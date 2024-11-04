@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -670,8 +671,17 @@ class TiendaApplicationTests {
     @Test
     void test28() {
         var listFabs = fabRepo.findAll();
+        var listaComp = listFabs.stream()
+                .map(f -> "Fabricante: " + f.getNombre()
+                        + "\n\nProductos:\n"
+                        + f.getProductos().stream()
+                        .map(Producto::getNombre)
+                        .collect(Collectors.joining("\n")))
+                .toList();
+        listaComp.forEach(System.out::println);
 
-
+        //Compruebo que la lista no este vacia
+        Assertions.assertFalse(listaComp.isEmpty());
     }
 
     /**
@@ -840,8 +850,21 @@ class TiendaApplicationTests {
          * [1] va ser el minimo
          * [2] va ser la suma
          * [3] va ser el contador
-         * p sera el precio
          */
+        /**
+         * Explicación de la operación reduce
+         * 1. Inicializamos el acumulador con un array de 4 elementos
+         * 2. Iteramos sobre los productos
+         * 3. Por cada producto, comprobamos si el fabricante es Crucial
+         * 4. Si es así, actualizamos el acumulador con los siguientes valores:
+         *   - Precio máximo: max(acumulador[0], precio)
+         *   - Precio mínimo: min(acumulador[1], precio)
+         *   - Suma de precios: acumulador[2] + precio
+         *   - Número de productos: acumulador[3] + 1
+         *   5. Al finalizar la iteración, devolvemos el acumulador
+         *   6. En el caso de que no haya productos de Crucial, el acumulador se inicializa con los siguientes valores:
+         *   - Precio máximo: 0.0
+         * */
 
         var resultado = listProds.stream()
                 .filter(p -> p.getFabricante().getNombre().equals("Crucial"))
@@ -908,6 +931,23 @@ class TiendaApplicationTests {
     @Test
     void test40() {
         var listFabs = fabRepo.findAll();
+        record FabricantePrecios( String nombre ,int codigo, double max, double min, double media, int numProd) {}
+        var result = listFabs.stream()
+                .map(f -> new FabricantePrecios(f.getNombre(), f.getCodigo(),
+                                        f.getProductos().stream().mapToDouble(Producto::getPrecio).max().orElse(0),
+                                        f.getProductos().stream().mapToDouble(Producto::getPrecio).min().orElse(0),
+                                        f.getProductos().stream().mapToDouble(Producto::getPrecio).average().orElse(0),
+                                        f.getProductos().size()))
+                .filter(f -> f.media() > 200)
+                .toList();
+
+        result.forEach(System.out::println);
+        //Compruebo que la lista de fabricantes tenga 3
+        Assertions.assertEquals(3, result.size());
+        //Compruebo que los fabricantes sean Asus, Lenovo y Crucial
+        Set<String> nombres = Set.of("Asus", "Lenovo", "Crucial");
+        Assertions.assertTrue(result.stream().allMatch(f -> nombres.contains(f.nombre())));
+
     }
 
     /**
@@ -1040,7 +1080,7 @@ class TiendaApplicationTests {
 
         listProdOrd.forEach(System.out::println);
 
-        //Compruebo que la liene 7
+        //Compruebo que la lista  tiene un tamaño  7
         Assertions.assertEquals(7, listProdOrd.size());
     }
 
