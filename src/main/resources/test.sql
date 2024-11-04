@@ -1,4 +1,4 @@
- -- Profe cuidado con el nombre de la base de datos que se esta utilizando por si no te va
+ -- Profe cuidado con la contraseña en el properties
 use tienda;
 -- Test n1 Lista los nombres y los precios de todos los productos de la tabla producto
 SELECT nombre, precio FROM producto;
